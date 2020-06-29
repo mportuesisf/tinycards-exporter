@@ -104,7 +104,7 @@ def verify_input_file(input_file_name):
                 idx = 0
                 for header in headers:
                     if header != row[idx]:
-                        raise Exception("Not a TinyCards export CSV file")
+                        raise Exception("Input file is not a TinyCards export CSV file.")
                     idx += 1
 
 def main():
