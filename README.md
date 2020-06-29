@@ -22,3 +22,7 @@ The output CSV file will contain the cards from all TinyCards decks. Each output
 back, and tag.
 
 The name of each TinyCards deck is converted into a tag, and attached to all cards of that deck.
+
+## Limitations
+ - If your deck in TinyCards has additional fields for each card face, they are not retained.  Only the first line of each card is transferred.
+ - Decks with pictures are not supported.
