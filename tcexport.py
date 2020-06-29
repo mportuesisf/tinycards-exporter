@@ -76,6 +76,7 @@ def output_decks(decks, output_file_name):
             for card in cards:
                 csv_writer.writerow([card.front, card.back, card.tag])
 
+# main conversion / processing loop
 def process(input_file_name, output_file_name):
     try:
         decks = read_and_convert_decks(input_file_name)
@@ -91,6 +92,21 @@ def process(input_file_name, output_file_name):
 
     return len(decks)
 
+# Look at the first line of the CSV file to verify it's a TinyCards deck export
+def verify_input_file(input_file_name):
+    headers = ["name","description","coverImage","cards","privacy","language","deleted","createdAt","updatedAt"]
+    with open(input_file_name, encoding="utf8") as input_csv_file:
+        csv_reader = csv.reader(input_csv_file,  delimiter=',')
+        line_count = 0
+        for row in csv_reader:
+            if line_count == 0:
+                line_count += 1
+                idx = 0
+                for header in headers:
+                    if header != row[idx]:
+                        raise Exception("Not a TinyCards export CSV file")
+                    idx += 1
+
 def main():
     ap = argparse.ArgumentParser(
     description ='Convert TinyCards decks from a Duolingo "Drive-Thru portal" export file ' \
@@ -103,6 +119,7 @@ def main():
     args=vars(ap.parse_args())
 
     try:
+        verify_input_file(args["infile"])
         deck_count = process(args["infile"], args["outfile"])
         print(f'Processed {deck_count} decks from {args["infile"]}.')
     except Exception as ex:
