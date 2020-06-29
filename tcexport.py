@@ -66,6 +66,7 @@ def read_and_convert_decks(input_file_name):
                 cards = parse_cards_for_deck(row[3], tagify(deck_name))
                 decks[deck_name] = cards
             line_count += 1
+
     return decks
 
 def output_decks(decks, output_file_name):
@@ -76,8 +77,18 @@ def output_decks(decks, output_file_name):
                 csv_writer.writerow([card.front, card.back, card.tag])
 
 def process(input_file_name, output_file_name):
-    decks = read_and_convert_decks(input_file_name)
-    output_decks(decks, output_file_name)
+    try:
+        decks = read_and_convert_decks(input_file_name)
+    except Exception:
+        print ("Error while reading CSV file:")
+        raise
+
+    try:
+        output_decks(decks, output_file_name)
+    except Exception:
+        print ("Error while writing CSV file:")
+        raise
+
     return len(decks)
 
 def main():
@@ -91,7 +102,10 @@ def main():
     ap.add_argument("-o", "--outfile", required=True, help="output file name (CSV export)")
     args=vars(ap.parse_args())
 
-    deck_count = process(args["infile"], args["outfile"])
-    print(f'Processed {deck_count} decks from {args["infile"]}.')
+    try:
+        deck_count = process(args["infile"], args["outfile"])
+        print(f'Processed {deck_count} decks from {args["infile"]}.')
+    except Exception as ex:
+        print(ex)
 
 main()
