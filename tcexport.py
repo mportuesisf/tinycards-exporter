@@ -54,11 +54,9 @@ def parse_cards_for_deck(card_text, tag):
 def tagify(text):
     return text.translate(str.maketrans('','',string.punctuation)).lower().replace(" ", "_")
 
-# main conversion loop
-def process(input_file_name, output_file_name):
+def read_and_convert_decks(input_file_name):
     decks = {}
 
-    # read the tinycards decks
     with open(input_file_name, encoding="utf8") as input_csv_file:
         csv_reader = csv.reader(input_csv_file,  delimiter=',')
         line_count = 0
@@ -68,15 +66,19 @@ def process(input_file_name, output_file_name):
                 cards = parse_cards_for_deck(row[3], tagify(deck_name))
                 decks[deck_name] = cards
             line_count += 1
+    return decks
 
-    # print out the decks to a new output CSV file
+def output_decks(decks, output_file_name):
     with open(output_file_name, encoding="utf8", mode='w') as output_csv_file:
         csv_writer = csv.writer(output_csv_file, delimiter=';', quotechar='"', quoting=csv.QUOTE_ALL)
         for deck_name, cards in decks.items():
             for card in cards:
                 csv_writer.writerow([card.front, card.back, card.tag])
 
-    print(f'Processed {line_count - 1} decks from {input_file_name}.')
+def process(input_file_name, output_file_name):
+    decks = read_and_convert_decks(input_file_name)
+    output_decks(decks, output_file_name)
+    return len(decks)
 
 def main():
     ap = argparse.ArgumentParser(
@@ -89,6 +91,7 @@ def main():
     ap.add_argument("-o", "--outfile", required=True, help="output file name (CSV export)")
     args=vars(ap.parse_args())
 
-    process(args["infile"], args["outfile"])
+    deck_count = process(args["infile"], args["outfile"])
+    print(f'Processed {deck_count} decks from {args["infile"]}.')
 
 main()
