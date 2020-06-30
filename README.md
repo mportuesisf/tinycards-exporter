@@ -12,6 +12,8 @@ The script was developed using Python 3.8.3 but will probably work with any vers
 
 ## Command Line Arguments
 ```
+tcexport.py -i INFILE -o OUTFILE
+
 -h, --help  show help message and exit
 -i, --infile INFILE  input file name
 -o, --outfile OUTFILE  output file name (CSV export)
