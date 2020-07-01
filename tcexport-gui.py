@@ -20,8 +20,10 @@ class TCExportApp(tk.Frame):
 
     def __init__(self, master=None):
         super().__init__(master)
-        self.input_file_name = ""
-        self.output_file_name = ""
+        self.input_file_name = StringVar()
+        self.input_file_name.set('')
+        self.output_file_name = StringVar()
+        self.output_file_name.set('')
 
         self.master=master
         self.pack(fill=BOTH, expand=True)
@@ -62,30 +64,30 @@ class TCExportApp(tk.Frame):
         self.convert_button= tk.Button(self, text='Convert',command=self.do_conversion, bg="SpringGreen3", state=tk.DISABLED)
         self.convert_button.pack(pady=10)
 
+        self.input_file_name.trace('w', self.entry_callback)
+        self.output_file_name.trace('w', self.entry_callback)
+
     def choose_input_file(self):
         p = pathlib.Path(os.path.expanduser("~"))
-        self.input_file_name = fd.askopenfilename(initialdir = p,
+        file_name = fd.askopenfilename(initialdir = p,
             title = "Select input file", filetypes = (("CSV files","*.csv"),("all files","*.*")))
-        if not self.input_file_name: return
+        if not file_name: return
 
-        self.input_field.delete(0, END)
-        self.input_field.insert(0, self.input_file_name)
-        self.update_convert_button_availability()
+        self.input_file_name.set(file_name)
 
     def choose_output_file(self):
         p = pathlib.Path(os.path.expanduser("~"))
-        self.output_file_name = fd.asksaveasfilename(initialdir = p,
+        file_name = fd.asksaveasfilename(initialdir = p,
             title = "Select output file", filetypes = (("CSV files","*.csv"),("all files","*.*")))
-        if not self.output_file_name: return
+        if not file_name: return
 
-        self.output_field.delete(0, END)
-        self.output_field.insert(0, self.output_file_name)
+        self.output_file_name.set(file_name)
+
+    def entry_callback(self, *args):
         self.update_convert_button_availability()
 
-    # XXX also handle typeins to the text field, update_convert_button_availability
-
     def update_convert_button_availability(self):
-        if self.input_file_name and self.output_file_name:
+        if self.input_file_name.get() and self.output_file_name.get():
             self.convert_button.config(state = tk.NORMAL)
         else:
             self.convert_button.config(state = tk.DISABLED)
@@ -95,17 +97,17 @@ class TCExportApp(tk.Frame):
         exporter = Exporter()
         decks = None
         try:
-            exporter.verify_input_file(self.input_file_name)
+            exporter.verify_input_file(self.input_file_name.get())
         except Exception as ex:
             print(ex)
 
         try:
-            decks = exporter.read_and_convert_decks(self.input_file_name)
+            decks = exporter.read_and_convert_decks(self.input_file_name.get())
         except Exception:
             print ("Error while reading CSV file:")
 
         try:
-            exporter.output_decks(decks, self.output_file_name)
+            exporter.output_decks(decks, self.output_file_name.get())
         except Exception:
             print ("Error while writing CSV file:")
 
