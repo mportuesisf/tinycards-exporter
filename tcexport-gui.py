@@ -27,7 +27,6 @@ class TCExportApp(tk.Frame):
         self.pack(fill=BOTH, expand=True)
         self.create_widgets()
 
-    # XXX fix layout
     def create_widgets(self):
         self.master.title("TinyCards Exporter")
 
@@ -37,7 +36,7 @@ class TCExportApp(tk.Frame):
         self.input_label= tk.Label(frame1, text='Input file:', font=('helvetica', 12, 'bold'))
         self.input_label.pack(side=tk.LEFT, padx=10, pady=10)
 
-        # input file button to summon file chooser
+        # button to summon file chooser for input file
         self.input_button= tk.Button(frame1, text='Choose...',command=self.choose_input_file)
         self.input_button.pack(side=tk.RIGHT, padx=10, pady=10)
 
@@ -51,7 +50,7 @@ class TCExportApp(tk.Frame):
         self.output_label= tk.Label(frame2, text='Output file:', font=('helvetica', 12, 'bold'))
         self.output_label.pack(side=tk.LEFT, padx=10, pady=10)
 
-        # output file button to summon file chooser
+        # button to summon file chooser for output file
         self.output_button= tk.Button(frame2, text='Choose...',command=self.choose_output_file)
         self.output_button.pack(side=tk.RIGHT, padx=10, pady=10)
 
@@ -60,7 +59,7 @@ class TCExportApp(tk.Frame):
         self.output_field.pack(fill=tk.X, padx=10)
 
         # convert button, starts out disabled, is enabled when both input/output names are set
-        self.convert_button= tk.Button(self, text='Convert',command=self.do_conversion, bg="SpringGreen3")
+        self.convert_button= tk.Button(self, text='Convert',command=self.do_conversion, bg="SpringGreen3", state=tk.DISABLED)
         self.convert_button.pack(pady=10)
 
     def choose_input_file(self):
@@ -86,8 +85,10 @@ class TCExportApp(tk.Frame):
     # XXX also handle typeins to the text field, update_convert_button_availability
 
     def update_convert_button_availability(self):
-        # XXX if both input and output are set, then enable the convert button, otherwise disable
-        pass
+        if self.input_file_name and self.output_file_name:
+            self.convert_button.config(state = tk.NORMAL)
+        else:
+            self.convert_button.config(state = tk.DISABLED)
 
     # XXX toast or popup on error or operation complete
     def do_conversion(self):
