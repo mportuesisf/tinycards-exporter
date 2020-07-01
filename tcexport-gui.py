@@ -9,6 +9,7 @@
 from exporter import Exporter
 import tkinter as tk
 from tkinter import filedialog as fd
+from tkinter import messagebox
 from tkinter import *
 
 import os
@@ -92,26 +93,28 @@ class TCExportApp(tk.Frame):
         else:
             self.convert_button.config(state = tk.DISABLED)
 
-    # XXX toast or popup on error or operation complete
     def do_conversion(self):
         exporter = Exporter()
         decks = None
         try:
             exporter.verify_input_file(self.input_file_name.get())
         except Exception as ex:
-            print(ex)
+            messagebox.showwarning("Invalid File", ex)
+            raise
 
         try:
             decks = exporter.read_and_convert_decks(self.input_file_name.get())
-        except Exception:
-            print ("Error while reading CSV file:")
+        except Exception as ex:
+            messagebox.showerror("Could not convert", "Error while reading CSV file.")
+            raise
 
         try:
             exporter.output_decks(decks, self.output_file_name.get())
-        except Exception:
-            print ("Error while writing CSV file:")
+        except Exception as ex:
+            messagebox.showerror("Could not convert", "Error while writing CSV file.")
+            raise
 
-        print("DONE")
+        messagebox.showinfo("Success", f'{len(decks)} decks converted.')
 
 def main():
     root = tk.Tk()
