@@ -21,7 +21,7 @@ tcexport.py -i INFILE -o OUTFILE
 -i, --infile INFILE  input file name
 -o, --outfile OUTFILE  output file name
 ```
-The GUI version `tcexport-gui` takes no command line arguments.
+The GUI version `tcexport-gui.py` takes no command line arguments.
 
 ## Notes
 
@@ -33,4 +33,4 @@ The name of each TinyCards deck is converted into a tag, and attached to all car
 
 ## Limitations
  - If your deck in TinyCards has additional fields for each card face, they are not retained.  Only the first line of each card is transferred.
- - Decks with pictures are not supported.
+ - Decks with pictures and sounds are not supported.
