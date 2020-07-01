@@ -30,7 +30,3 @@ The input file is in TinyCards CSV format, this is the 'decks.csv' file in the D
 The output file is written in CSV format and contains the cards from all TinyCards decks. Each output CSV record has three fields: front, back, and tag.
 
 The name of each TinyCards deck is converted into a tag, and attached to all cards of that deck.
-
-## Limitations
- - If your deck in TinyCards has additional fields for each card face, they are not retained.  Only the first line of each card is transferred.
- - Decks with pictures and sounds are not supported.
