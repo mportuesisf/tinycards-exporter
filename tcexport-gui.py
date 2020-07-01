@@ -24,38 +24,44 @@ class TCExportApp(tk.Frame):
         self.output_file_name = ""
 
         self.master=master
-        self.pack()
+        self.pack(fill=BOTH, expand=True)
         self.create_widgets()
 
     # XXX fix layout
     def create_widgets(self):
+        self.master.title("TinyCards Exporter")
+
+        frame1= Frame(self)
+        frame1.pack(fill=tk.X)
         # input file prompt
-        self.input_label= tk.Label(self, text='Input file:', font=('helvetica', 12, 'bold'))
-        self.input_label.pack(side="top")
+        self.input_label= tk.Label(frame1, text='Input file:', font=('helvetica', 12, 'bold'))
+        self.input_label.pack(side=tk.LEFT, padx=10, pady=10)
+
+        # input file button to summon file chooser
+        self.input_button= tk.Button(frame1, text='Choose...',command=self.choose_input_file)
+        self.input_button.pack(side=tk.RIGHT, padx=10, pady=10)
 
         # input file text field
         self.input_field= tk.Entry(self, textvariable=self.input_file_name)
-        self.input_field.pack(side="top")
+        self.input_field.pack(fill=tk.X, padx=10)
 
-        # input file button to summon file chooser
-        self.input_button= tk.Button(text='Choose Input File...',command=self.choose_input_file)
-        self.input_button.pack(side="top")
-
+        frame2 = Frame(self)
+        frame2.pack(fill=tk.X)
         # output file prompt
-        self.output_label= tk.Label(self, text='Output file:', font=('helvetica', 12, 'bold'))
-        self.output_label.pack(side="bottom")
+        self.output_label= tk.Label(frame2, text='Output file:', font=('helvetica', 12, 'bold'))
+        self.output_label.pack(side=tk.LEFT, padx=10, pady=10)
+
+        # output file button to summon file chooser
+        self.output_button= tk.Button(frame2, text='Choose...',command=self.choose_output_file)
+        self.output_button.pack(side=tk.RIGHT, padx=10, pady=10)
 
         # output file text field
         self.output_field= tk.Entry(self, textvariable=self.output_file_name)
-        self.output_field.pack(side="bottom")
-
-        # output file button to summon file chooser
-        self.output_button= tk.Button(text='Choose Output File...',command=self.choose_output_file)
-        self.output_button.pack(side="bottom")
+        self.output_field.pack(fill=tk.X, padx=10)
 
         # convert button, starts out disabled, is enabled when both input/output names are set
-        self.convert_button= tk.Button(text='Convert',command=self.do_conversion)
-        self.convert_button.pack(side="bottom")
+        self.convert_button= tk.Button(self, text='Convert',command=self.do_conversion, bg="SpringGreen3")
+        self.convert_button.pack(pady=10)
 
     def choose_input_file(self):
         p = pathlib.Path(os.path.expanduser("~"))
@@ -83,23 +89,21 @@ class TCExportApp(tk.Frame):
         # XXX if both input and output are set, then enable the convert button, otherwise disable
         pass
 
+    # XXX toast or popup on error or operation complete
     def do_conversion(self):
         exporter = Exporter()
         decks = None
         try:
-            print(f'verifying: {self.input_file_name}')
             exporter.verify_input_file(self.input_file_name)
         except Exception as ex:
             print(ex)
 
         try:
-            print(f'reading: {self.input_file_name}')
             decks = exporter.read_and_convert_decks(self.input_file_name)
         except Exception:
             print ("Error while reading CSV file:")
 
         try:
-            print(f'writing: {self.output_file_name}')
             exporter.output_decks(decks, self.output_file_name)
         except Exception:
             print ("Error while writing CSV file:")
