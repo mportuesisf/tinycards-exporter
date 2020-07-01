@@ -63,7 +63,7 @@ class TCExportApp(tk.Frame):
 
         # convert button, starts out disabled, is enabled when both input/output names are set
         self.convert_button= tk.Button(self, text='Convert',command=self.do_conversion, bg="SpringGreen3", state=tk.DISABLED)
-        self.convert_button.pack(pady=10)
+        self.convert_button.pack(side=tk.BOTTOM, pady=10)
 
         self.input_file_name.trace('w', self.entry_callback)
         self.output_file_name.trace('w', self.entry_callback)
@@ -118,6 +118,7 @@ class TCExportApp(tk.Frame):
 
 def main():
     root = tk.Tk()
+    root.minsize(640, 200)
     app = TCExportApp(master=root)
     app.mainloop()
 
