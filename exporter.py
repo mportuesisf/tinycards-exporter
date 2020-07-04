@@ -31,12 +31,12 @@ class Exporter(object):
         for line in card_text.splitlines():
             if "### Card" in line:
                 in_card = True
-            elif in_card and "Front" in line:
+            elif in_card and not in_front and line.strip() == "Front":
                 in_front = True
             elif in_front:
                 card_front = line.strip("* ")
                 in_front = False
-            elif in_card and "Back" in line:
+            elif in_card and not in_back and line.strip() == "Back":
                 in_back = True
             elif in_back:
                 card_back = line.strip("* ")
