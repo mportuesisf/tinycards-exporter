@@ -29,7 +29,8 @@ def process(input_file_name, output_file_name):
 
 def main():
     ap = argparse.ArgumentParser(
-    description ='Convert TinyCards decks from a Duolingo "Drive-Thru portal" export file ' \
+    description ='tcexport version '+ Exporter.VERSION + \
+    ' -- Convert TinyCards decks from a Duolingo "Drive-Thru portal" export file ' \
     'into a flat CSV file suitable for import into Anki or another flashcard app',
     epilog='The output CSV file will contain the cards from all TinyCards decks. Each ' \
     'output CSV record has three fields: front, back, and tag. The name of the TinyCards ' \

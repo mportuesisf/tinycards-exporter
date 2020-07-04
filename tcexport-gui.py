@@ -31,7 +31,7 @@ class TCExportApp(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        self.master.title("TinyCards Exporter v1.0")
+        self.master.title("TinyCards Exporter " + Exporter.VERSION)
 
         frame1= Frame(self)
         frame1.pack(fill=tk.X)
